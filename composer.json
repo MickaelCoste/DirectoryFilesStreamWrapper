@@ -1,0 +1,23 @@
+{
+    "name": "mcoste/directory-files-stream-wrapper",
+    "description": "A stream wrapper for PHP that allow to read from multiple files with one resource.",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Mickaël Coste",
+            "email": "mickael.coste@viacesi.fr"
+        }
+    ],
+    "require": {
+        "php": ">=7.1"
+    },
+    "require-dev": {
+        "phpunit/phpunit": ">=8.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "MCoste\\StreamWrapper\\": "src/"
+        }
+    }
+}
