@@ -157,4 +157,43 @@ class DirectoryFilesStreamWrapperTest extends TestCase
         rmdir($directory);
     }
 
+    public function testSeek()
+    {
+        $protocol = 'seek';
+        $directory = tempnam(sys_get_temp_dir(), 'TEST');
+
+        if(file_exists($directory)) { unlink($directory); }
+        mkdir($directory);
+
+        $files = [
+            'This is file 1 content.' => 'file1.txt',
+            'This is file 2 content.' => 'file2.txt',
+            'This is file 3 content.' => 'file3.txt'
+        ];
+
+        $allContent = '';
+        $position = 31;
+        $readExpected = '';
+        foreach($files as $content => $file) {
+            file_put_contents($directory.DIRECTORY_SEPARATOR.$file, $content);
+            $allContent .= $content;
+        }
+        $readExpected = substr($allContent, $position);
+
+        DirectoryFilesStreamWrapper::register($protocol);
+        $r = fopen("$protocol://$directory", 'r');
+        fseek($r, $position);
+        $this->assertEquals(
+            $readExpected,
+            fgets($r),
+            'The file pointer has not been correctly positioned.'
+        );
+        fclose($r);
+
+        foreach($files as $file) {
+            unlink($directory.DIRECTORY_SEPARATOR.$file);
+        }
+        rmdir($directory);
+    }
+
 }

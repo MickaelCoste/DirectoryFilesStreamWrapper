@@ -250,13 +250,14 @@ class DirectoryFilesStreamWrapper implements IReadableStreamWrapper
 
         foreach($it as $file) {
             $size = filesize($file);
-            if($p + $size > $position) {
-                $this->closeFile();
+            if($p + $size >= $position) {
+                $this->closeCurrentFile();
                 $this->files = $it;
-                $this->openFile();
+                $this->openCurrentFile();
                 fseek($this->resource, $position - $p);
                 return true;
             }
+            $p += $size;
         }
 
         return false;
